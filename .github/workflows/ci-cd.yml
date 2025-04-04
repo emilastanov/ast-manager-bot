@@ -1,0 +1,48 @@
+name: CI/CD with Docker Compose
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Вход в Docker Hub
+        run: echo "${{ secrets.DOCKER_PASS }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
+
+      - name: Сборка и пуш Docker-образа
+        run: |
+          docker build -t ${{ secrets.DOCKER_USER }}/ast-manager-bot:latest .
+          docker push ${{ secrets.DOCKER_USER }}/ast-manager-bot:latest
+
+      - name: Подключение к серверу и деплой
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ENV_FILE_CONTENT: ${{ secrets.ENV }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+          
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ vars.USERNAME }}@${{ vars.HOST }} << EOF
+            set -e
+            cd ${{ vars.PROJECT_PATH }} || exit 1
+          
+            echo "$ENV_FILE_CONTENT" > .env
+            chmod 600 .env
+          
+            docker pull ${{ secrets.DOCKER_USER }}/ast-manager-bot:latest || exit 1
+            docker compose down || true
+            docker compose up -d || exit 1
+            docker image prune -f
+          EOF
+          
+          rm private_key.pem
+
+      - name: Post-deploy message
+        run: echo "Deployment completed successfully!"
