@@ -1,4 +1,3 @@
-from services.google_sheets.get_consumables import get_consumables
 
 
 def calc_price(minutes, cloth_type):
