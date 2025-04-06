@@ -10,7 +10,7 @@ def calc_price(minutes, cloth_type):
         'кепка': 500,
         'худи': 1750,
         'свитшот': 1750,
-        'толстовка': 2500
+        'толстова': 2500
     }
 
     price = (minutes/60)*(data['F3']+data['G3']+data['H3']) + data['I3']+data['J3'] + (minutes/60)*cloth_prices[cloth_type_lower]

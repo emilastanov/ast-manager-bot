@@ -4,6 +4,7 @@ from telegram import Update, InlineQueryResultArticle, InputTextMessageContent
 from telegram.ext import ContextTypes
 
 from cases.calc_price import calc_price
+from texts.calc_price import CALC_PRICE_TEXT
 
 
 async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -29,13 +30,13 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         minutes = int(time_str)
         total, minimum, recommended = calc_price(minutes, cloth_type)
         title = f"{cloth_type.title()} • {minutes} мин"
-        text = (
-            f"🧵 Стоимость вышивки:\n\n"
-            f"• Тип одежды: {cloth_type.title()}\n"
-            f"• Время: {minutes} минут\n"
-            f"• Себестоимость: {total} ₽\n"
-            f"• Минимальная цена: {minimum} ₽\n"
-            f"• 💡 Рекомендованная цена: {recommended} ₽"
+
+        text = CALC_PRICE_TEXT.format(
+            cloth_type=cloth_type.title(),
+            minutes=minutes,
+            total=total,
+            minimum=minimum,
+            recommended=recommended
         )
 
         await update.inline_query.answer([

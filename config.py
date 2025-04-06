@@ -3,7 +3,10 @@ import os
 
 load_dotenv()
 
+ENV = os.getenv("ENV")
+
 TOKEN = os.getenv("BOT_TOKEN")
+TOKEN_DEV = os.getenv("BOT_TOKEN_DEV")
 
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
@@ -18,3 +21,5 @@ GOOGLE_PRIVATE_KEY = os.environ["GOOGLE_PRIVATE_KEY"].replace("\\n", "\n")
 GOOGLE_CLIENT_X509_CERT_URL = os.getenv("GOOGLE_CLIENT_X509_CERT_URL")
 GOOGLE_UNIVERSE_DOMAIN = os.getenv("GOOGLE_UNIVERSE_DOMAIN")
 GOOGLE_SHEET_KEY = os.getenv("GOOGLE_SHEET_KEY")
+
+DATABASE_URL = os.getenv("DATABASE_URL")
