@@ -31,3 +31,5 @@ build/
 
 # Cache
 *.cache
+test.py
+dump.txt
