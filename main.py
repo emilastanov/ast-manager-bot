@@ -1,7 +1,7 @@
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, InlineQueryHandler
 
 from config import TOKEN, ENV, TOKEN_DEV
-from core import load
+from core import load_module
 
 if __name__ == "__main__":
 
@@ -14,9 +14,9 @@ if __name__ == "__main__":
 
     app = ApplicationBuilder().token(token).build()
 
-    load(app, "commands", CommandHandler, named=True)
-    load(app, "button_handlers", CallbackQueryHandler)
-    load(app, "inline_query_handlers", InlineQueryHandler)
+    load_module(app, "commands", CommandHandler, named=True)
+    load_module(app, "button_handlers", CallbackQueryHandler, pattern=True)
+    load_module(app, "inline_query_handlers", InlineQueryHandler)
 
     print("Бот запущен...")
     app.run_polling()

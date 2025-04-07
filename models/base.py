@@ -25,20 +25,20 @@ class CRUDMixin:
     def find(cls, limit=25, offset=0, **filters):
         try:
             with SessionLocal() as db:
-                entities = db.query(cls)
+                query = db.query(cls)
+                entities = query
 
                 if filters:
                     conditions = [getattr(cls, field_name) == value for field_name, value in filters.items()]
-                    entities.filter(conditions)
+                    entities = entities.filter(*conditions)
 
-                entities.limit(limit).offset(offset).all()
+                entities = entities.limit(limit).offset(offset).all()
 
-                total_count = db.query(cls).count()
+                total_count = query.count()
 
                 return entities, total_count
 
         except SQLAlchemyError as e:
-            db.rollback()
             raise ValueError(f"Failed to find {cls.__str__}: {str(e)}")
 
     @classmethod
@@ -52,7 +52,6 @@ class CRUDMixin:
                 return entity
 
         except SQLAlchemyError as e:
-            db.rollback()
             raise ValueError(f"Failed to find {cls.__str__}: {str(e)}")
 
     @classmethod
@@ -70,5 +69,18 @@ class CRUDMixin:
                 return entity
 
         except SQLAlchemyError as e:
-            db.rollback()
             raise ValueError(f"Failed to find {cls.__str__}: {str(e)}")
+
+    @classmethod
+    def delete(cls, id):
+        try:
+            with SessionLocal() as db:
+                entity = db.query(cls).filter(getattr(cls, "id") == id).first()
+
+                db.delete(entity)
+                db.commit()
+
+                return entity
+
+        except SQLAlchemyError as e:
+            raise ValueError(f"Failed to delete {cls.__str__}: {str(e)}")

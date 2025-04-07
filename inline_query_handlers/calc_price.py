@@ -52,6 +52,15 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             InlineQueryResultArticle(
                 id=str(uuid4()),
                 title="❌ Ошибка: неверный ввод",
-                input_message_content=InputTextMessageContent(str(e))
+                input_message_content=InputTextMessageContent(f"❌ {str(e)}")
+            )
+        ])
+
+    except KeyError as e:
+        await update.inline_query.answer([
+            InlineQueryResultArticle(
+                id=str(uuid4()),
+                title="❌ Ошибка: неверный ввод",
+                input_message_content=InputTextMessageContent("❌ Доступные значения: Футболка, Кепка, Свитшот, Толстовка, Худи!")
             )
         ])

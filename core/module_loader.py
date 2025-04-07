@@ -2,7 +2,7 @@ import importlib
 import os
 
 
-def load(app, module_dir, func, named=False):
+def load_module(app, module_dir, func, named=False, pattern=None):
 
     command_modules = filter(
         lambda filename: filename.endswith(".py") and filename != "__init__.py",
@@ -22,5 +22,7 @@ def load(app, module_dir, func, named=False):
 
         if named:
             app.add_handler(func(command_name, handler_func))
+        elif pattern:
+            app.add_handler(func(handler_func, pattern=f"^{command_name}:"))
         else:
             app.add_handler(func(handler_func))
