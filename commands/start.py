@@ -2,6 +2,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from crud.find_or_create_user import find_or_create_user
+from models.User import UserType
 from texts.hello import HELLO, GROUP_HELLO, USER_INFO, GROUP_INFO
 
 
@@ -13,7 +14,7 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     text = ""
 
-    if chat.type == "private":
+    if chat.type == UserType.private:
         user = update.effective_user
 
         if is_new:
