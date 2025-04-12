@@ -14,7 +14,7 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     text = ""
 
-    if chat.type == UserType.private:
+    if chat.type == UserType.private.value:
         user = update.effective_user
 
         if is_new:

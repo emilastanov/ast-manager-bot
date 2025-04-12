@@ -16,7 +16,7 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat = update.effective_chat
     text = message.text
 
-    if chat.type == UserType.private:
+    if chat.type == UserType.private.value:
         answer = await simple_answer(text)
 
         await message.reply_text(answer, parse_mode="Markdown")
