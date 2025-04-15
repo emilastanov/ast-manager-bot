@@ -8,7 +8,7 @@ def format_user_list_message(users, pagination_data):
         total_count=pagination_data['total_count'],
         current_page=pagination_data['current_page'],
         limit=pagination_data['limit'],
-        users="\n".join([f"• <code>{
+        users="\n".join([f"""• <code>{
             f"@{u['name']}" if u["type"] == UserType.private else u['name']
-        }</code>" for u in users])
+        }</code>""" for u in users])
     )
